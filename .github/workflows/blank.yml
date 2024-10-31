@@ -51,13 +51,13 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         cat >> .config << EOF
-CONFIG_TARGET_x86=y
-CONFIG_TARGET_x86_64=y
-CONFIG_TARGET_x86_64_DEVICE_generic=y
-CONFIG_ALL=y
-CONFIG_ALL_KMODS=y
-CONFIG_ALL_NONSHARED=y
-EOF
+        CONFIG_TARGET_x86=y
+        CONFIG_TARGET_x86_64=y
+        CONFIG_TARGET_x86_64_DEVICE_generic=y
+        CONFIG_ALL=y
+        CONFIG_ALL_KMODS=y
+        CONFIG_ALL_NONSHARED=y
+        EOF
         cat .config
         make defconfig && make download -j8 v=s
 
