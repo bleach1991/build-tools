@@ -51,6 +51,8 @@ jobs:
 
     - name: download dl
       run: |
+        cd lede/
+        
         # x86_64
         rm -rfv .config
         cat >> .config << EOF
