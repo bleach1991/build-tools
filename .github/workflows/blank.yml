@@ -34,14 +34,12 @@ jobs:
         sudo chown $USER:$GROUPS /workdir
 
 
-
     - name: Clone source code
       working-directory: /workdir
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH lede
         ln -sf /workdir/lede $GITHUB_WORKSPACE/lede
-
 
 
     - name: Load custom feeds
@@ -53,14 +51,10 @@ jobs:
         CONFIG_TARGET_x86=y
         CONFIG_TARGET_x86_64=y
         CONFIG_TARGET_x86_64_DEVICE_generic=y
-        CONFIG_ALL=y
-        CONFIG_ALL_KMODS=y
-        CONFIG_ALL_NONSHARED=y
         EOF
         cat .config
+        make defconfig && cat .config |grep luci-app|egrep -v "CONFIG_DEFAULT"|egrep -v '=y'|awk '{print $2"=y"}' >> .config
         make defconfig && make download -j8 v=s
-
-
 
 
     - name: check
