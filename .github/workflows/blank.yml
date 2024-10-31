@@ -42,11 +42,17 @@ jobs:
         ln -sf /workdir/lede $GITHUB_WORKSPACE/lede
 
 
-    - name: Load custom feeds
+    - name: Load feeds
       run: |
         cd lede/
         ./scripts/feeds update -a
         ./scripts/feeds install -a
+
+
+    - name: download dl
+      run: |
+        # x86_64
+        rm -rfv .config
         cat >> .config << EOF
         CONFIG_TARGET_x86=y
         CONFIG_TARGET_x86_64=y
@@ -56,6 +62,93 @@ jobs:
         make defconfig && cat .config |grep luci-app|egrep -v "CONFIG_DEFAULT"|egrep -v '=y'|awk '{print $2"=y"}' >> .config
         make defconfig && make download -j8 v=s
 
+        # rockchip
+        rm -rfv .config
+        CONFIG_TARGET_rockchip=y
+        CONFIG_TARGET_rockchip_armv8=y
+        CONFIG_TARGET_MULTI_PROFILE=y
+        CONFIG_TARGET_ALL_PROFILES=y
+        EOF
+        cat .config
+        make defconfig && cat .config |grep luci-app|egrep -v "CONFIG_DEFAULT"|egrep -v '=y'|awk '{print $2"=y"}' >> .config
+        make defconfig && make download -j8 v=s
+
+        # bcm rpi-5
+        rm -rfv .config
+        cat >> .config << EOF
+        CONFIG_TARGET_bcm27xx=y
+        CONFIG_TARGET_bcm27xx_bcm2712=y
+        CONFIG_TARGET_bcm27xx_bcm2712_DEVICE_rpi-5=y
+        
+        CONFIG_PACKAGE_autocore-arm=y
+        EOF
+        cat .config
+        make defconfig && cat .config |grep luci-app|egrep -v "CONFIG_DEFAULT"|egrep -v '=y'|awk '{print $2"=y"}' >> .config
+        make defconfig && make download -j8 v=s
+
+        # bcm rpi-4
+        rm -rfv .config
+        cat >> .config << EOF
+        CONFIG_TARGET_bcm27xx=y
+        CONFIG_TARGET_bcm27xx_bcm2711=y
+        CONFIG_TARGET_bcm27xx_bcm2711_DEVICE_rpi-4=y
+        
+        CONFIG_PACKAGE_autocore-arm=y
+        EOF
+        cat .config
+        make defconfig && cat .config |grep luci-app|egrep -v "CONFIG_DEFAULT"|egrep -v '=y'|awk '{print $2"=y"}' >> .config
+        make defconfig && make download -j8 v=s
+
+        # bcm k3
+        rm -rfv .config
+        cat >> .config << EOF
+        CONFIG_TARGET_bcm53xx=y
+        CONFIG_TARGET_bcm53xx_generic=y
+        CONFIG_TARGET_bcm53xx_generic_DEVICE_phicomm_k3=y
+        
+        CONFIG_PACKAGE_autocore-arm=y
+        EOF
+        cat .config
+        make defconfig && cat .config |grep luci-app|egrep -v "CONFIG_DEFAULT"|egrep -v '=y'|awk '{print $2"=y"}' >> .config
+        make defconfig && make download -j8 v=s
+
+        # mtk mt798x
+        rm -rfv .config
+        cat >> .config << EOF
+        CONFIG_TARGET_mediatek=y
+        CONFIG_TARGET_mediatek_filogic=y
+        CONFIG_TARGET_MULTI_PROFILE=y
+        CONFIG_TARGET_ALL_PROFILES=y
+        EOF
+        cat .config
+        make defconfig && cat .config |grep luci-app|egrep -v "CONFIG_DEFAULT"|egrep -v '=y'|awk '{print $2"=y"}' >> .config
+        make defconfig && make download -j8 v=s
+        
+        # mtk mt7621
+        rm -rfv .config
+        cat >> .config << EOF
+        CONFIG_TARGET_ramips=y
+        CONFIG_TARGET_ramips_mt7621=y
+        CONFIG_TARGET_MULTI_PROFILE=y
+        CONFIG_TARGET_ALL_PROFILES=y
+        EOF
+        cat .config
+        make defconfig && cat .config |grep luci-app|egrep -v "CONFIG_DEFAULT"|egrep -v '=y'|awk '{print $2"=y"}' >> .config
+        make defconfig && make download -j8 v=s
+
+        # qca ipq60xx
+        rm -rfv .config
+        cat >> .config << EOF
+        CONFIG_TARGET_qualcommax=y
+        CONFIG_TARGET_qualcommax_ipq60xx=y
+        CONFIG_TARGET_MULTI_PROFILE=y
+        CONFIG_TARGET_ALL_PROFILES=y
+        
+        CONFIG_PACKAGE_autocore-arm=y
+        EOF
+        cat .config
+        make defconfig && cat .config |grep luci-app|egrep -v "CONFIG_DEFAULT"|egrep -v '=y'|awk '{print $2"=y"}' >> .config
+        make defconfig && make download -j8 v=s
 
     - name: check
       run: |
