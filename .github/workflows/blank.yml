@@ -66,6 +66,7 @@ jobs:
 
         # rockchip
         rm -rfv .config
+        cat >> .config << EOF
         CONFIG_TARGET_rockchip=y
         CONFIG_TARGET_rockchip_armv8=y
         CONFIG_TARGET_MULTI_PROFILE=y
