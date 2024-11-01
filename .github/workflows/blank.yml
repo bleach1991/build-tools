@@ -164,3 +164,13 @@ jobs:
       with:
         name: dl-${{ env.CURRENT_DATE }}
         path: lede/dl
+
+
+    - name: Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: lede/dl/
+        server-dir: /dl/
