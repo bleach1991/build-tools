@@ -1,4 +1,4 @@
-name: download dl
+name: download dl test
 
 on:
   repository_dispatch:
@@ -97,7 +97,7 @@ jobs:
       run: |
         cd lede/        
         rm -rfv .config
-        echo >> ${{ matrix.config }} .config
+        echo ${{ matrix.config }} >> .config
         cat .config
         make defconfig && cat .config |grep luci-app|egrep -v "CONFIG_DEFAULT"|egrep -v '=y'|awk '{print $2"=y"}' >> .config
         make defconfig && make download -j8 v=s
