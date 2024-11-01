@@ -174,3 +174,4 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: lede/dl/
         server-dir: /dl/
+        timeout: 600000
